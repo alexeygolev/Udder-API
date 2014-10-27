@@ -3,18 +3,29 @@ FORMAT: 1A
 # udder
 Udder API is a *content management* service for Udder CMS.
 
-# Group Notes
-Notes related resources of the **Notes API**
+# Group Narratives
+Narrative related resources of the **Udder API**
 
-## Notes Collection [/notes]
+## Narrative Collection [/narratives]
++ Model (application/vnd.collection+json)
+    + Body
+    
+            {
+                "collection": { 
+                "version": "1.0",
+                "data": [
+                    {
+                        
+                    }
+                ] 
+                }
+            }
+    
 ### List all Notes [GET]
-+ Response 200 (application/json)
-
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
++ Response 200
+    
+    [Narrative Collection][]
+        
 
 ### Create a Note [POST]
 + Request (application/json)
