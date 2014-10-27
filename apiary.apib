@@ -6,18 +6,23 @@ Udder API is a *content management* service for Udder CMS.
 # Group Narratives
 Narrative related resources of the **Udder API**
 
-## Narrative Collection [/narratives]
+## Narrative Collection [/narratives?verbose=true]
 + Model (application/json)
     + Body
     ```
     {
         "collection": { 
             "version": "1.0",
-            "href": {"rel":"self", "href": "http://private-88d12-udder.apiary-mock.com/", "prompt": "Udder"},
+            "href": {"rel":"self", "href": "http://private-88d12-udder.apiary-mock.com/narratives", "prompt": "Udder"},
             "links": [
                 {"rel": "users", "href": "http://private-88d12-udder.apiary-mock.com/users", "prompt": "Users"},
-                {"rel": "narratives", "href": "http://private-88d12-udder.apiary-mock.com/narratives", "prompt": "Narratives"}
-            ]
+                {"rel": "narratives", "href": "http://private-88d12-udder.apiary-mock.com/narratives", "prompt": "Narratives"},
+                {"rel": "users", "href": "http://private-88d12-udder.apiary-mock.com/users", "prompt": "Users"}
+            ],
+            "properties": {
+                _id: '12',
+                
+            }
                
         }
     }
