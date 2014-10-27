@@ -6,7 +6,8 @@ Udder API is a *content management* service for Udder CMS.
 # Group Narratives
 Narrative related resources of the **Udder API**
 
-## Narrative Collection [/narratives?verbose=true]
+## Narrative Collection [/narratives{?verbose}]
+
 + Model (application/json)
     + Body
     ```
@@ -20,7 +21,7 @@ Narrative related resources of the **Udder API**
                 {"rel": "users", "href": "http://private-88d12-udder.apiary-mock.com/users", "prompt": "Users"}
             ],
             "properties": {
-                _id: '12',
+                "_id": "12",
                 
             }
                
@@ -29,6 +30,10 @@ Narrative related resources of the **Udder API**
     ```
     
 ### List all Notes [GET]
++ Parameters
+    
+    + verbose (optional, boolean) ... Return verbose object (for content manager) or simple object (for content consumer)
+
 + Response 200
     
     [Narrative Collection][]
