@@ -6,7 +6,7 @@ Udder API is a *content management* service for Udder CMS.
 # Group Narratives
 Narrative related resources of the **Udder API**
 
-## Narrative Collection [/narratives{?verbose}]
+## Narrative Collection [/{projectId}/narratives]
 
 + Model (application/json)
     + Body
@@ -14,11 +14,11 @@ Narrative related resources of the **Udder API**
     {
         "collection": { 
             "version": "1.0",
-            "href": {"rel":"self", "href": "http://private-88d12-udder.apiary-mock.com/narratives", "prompt": "Udder"},
+            "href": {"rel":"self", "href": "http://udder.wearegoat.uk/narratives", "prompt": "Udder"},
             "links": [
-                {"rel": "users", "href": "http://private-88d12-udder.apiary-mock.com/users", "prompt": "Users"},
-                {"rel": "narratives", "href": "http://private-88d12-udder.apiary-mock.com/narratives", "prompt": "Narratives"},
-                {"rel": "users", "href": "http://private-88d12-udder.apiary-mock.com/users", "prompt": "Users"}
+                {"rel": "users", "href": "http://udder.wearegoat.uk/users", "prompt": "Users"},
+                {"rel": "narratives", "href": "http://udder.wearegoat.uk/narratives", "prompt": "Narratives"},
+                {"rel": "users", "href": "http://udder.wearegoat.uk/users", "prompt": "Users"}
             ],
             "properties": {
                 "_id": "12",
@@ -29,14 +29,26 @@ Narrative related resources of the **Udder API**
     }
     ```
     
-### List all Notes [GET]
-+ Parameters
-    
-    + verbose (optional, boolean) ... Return verbose object (for content manager) or simple object (for content consumer)
+### Get all narratives of a project [GET]
+
++ Parameter
+   
+    + projectId (required, string) ... Project Id
+
++ Request (application/json)
+
 
 + Response 200
     
     [Narrative Collection][]
+
+
++ Response 400 (application/json)
+    
+    + Body
+   
+            {"error": "blabla"}
+    
         
 
 ### Create a Note [POST]
