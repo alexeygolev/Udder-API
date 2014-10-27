@@ -9,17 +9,19 @@ Narrative related resources of the **Udder API**
 ## Narrative Collection [/narratives]
 + Model (application/json)
     + Body
-    
-            {
-                "collection": { 
-                "version": "1.0",
-                "href": {"rel":"self", "href": "http://udder.wearegoat.uk", "prompt": "Udder"},
-                "links": [
-                    {"rel": "", "href": "http://udder.wearegoat.com/users"}
-                ]
+    ```
+    {
+        "collection": { 
+            "version": "1.0",
+            "href": {"rel":"self", "href": "http://udder.wearegoat.uk", "prompt": "Udder"},
+            "links": [
+                {"rel": "users", "href": "/users", "prompt": "Users"},
+                {"rel": "narratives", "href": "/narratives", "prompt": "Narratives"}
+            ]
                
-                }
-            }
+        }
+    }
+    ```
     
 ### List all Notes [GET]
 + Response 200
