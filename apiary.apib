@@ -100,10 +100,36 @@ Single project
             "description": { "value": "Website for fish4tomorrow", "prompt": "Default description" },
             "author": { "value": "Fish4tomorrow", "prompt": "Website owner" },
             "gaCode": { "value": "11223-4545-323", "prompt": "Google analytics code" },
-            "social": [
+            "meta": [
                 {
-                    "facebookId": "",
-                    "twitterId": "",
+                    "fb": {
+                        "admins": {
+                            "value": "",
+                            "prompt": "Facebook id",
+                            "@render": {
+                                "attr": "property"
+                            }
+                        }
+                        
+                    },
+                    "twitter": {
+                        "site": {
+                            "value": "",
+                            "prompt": "Twitter handle",
+                            "@render": {
+                                "attr": "name"
+                            }
+                        },
+                        
+                        "creator": {
+                            "value": "",
+                            "prompt": "Twitter creator",
+                            "@render": {
+                                "attr": "name"
+                            }
+                        }
+
+                    },
                 }
             ]
             
@@ -222,10 +248,12 @@ Single project
             ]
         }
     ```
-### Delete project [DELETE]
-   + Request (application/json)
 
-   + Response 204
+### Delete project [DELETE]
+
++ Request (application/json)
+
++ Response 204
    
 ## Projects collection [/projects]
 Projects collection is the root endpoint for users 
