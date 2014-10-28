@@ -142,7 +142,7 @@ Single project
                 {"rel": "start", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Projects" }
             ],
             "@render": {
-                "type": ["card","project"]
+                "type": [ "card", "project", "details" ]
             },
             "@actions": [
                 "ud:delete": {
@@ -275,16 +275,10 @@ who have more than one project associated with them.
             "projects": [
                 {
                     "_id": "1",
-                    "title": "Fish4Tomorrow",
+                    "name": "Fish4Tomorrow",
                     "description": "Website for fish4tomorrow",
-                    "data": {
-                        "metaData": "What is going to be here?",
-                        "gaCode": "code blablabla",
-                        "social": [
-                            {
-                                "facebook": { "token": "1212" }
-                            }
-                        ]
+                    "@render": {
+                        "type": ["card", "project"]
                     },
                     "@links": {
                         "self": { "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
@@ -292,23 +286,17 @@ who have more than one project associated with them.
                     }
                 },
                 {
-                    "_id": "2",
-                    "title": "Paul Furey: Main",
-                    "description": "Main website for Paul Furey",
-                    "data": {
-                        "metaData": "What is going to be here?",
-                        "gaCode": "code blablabla",
-                        "social": [
-                            {
-                                "facebook": { "token": "1212" }
-                            }
-                        ]
+                    "_id": "1",
+                    "name": "Fish4Tomorrow",
+                    "description": "Website for fish4tomorrow",
+                    "@render": {
+                        "type": ["card", "project"]
                     },
                     "@links": {
-                        "self": { "href": "http://udder.wearegoat.uk/projects/2", "title": "Project details" },
-                        "ud:narratives": { "href": "http://udder.wearegoat.uk/projects/2/narratives", "title": "Project narrative collections" }
+                        "self": { "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
+                        "ud:narratives": { "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Project narrative collections" }
                     }
-                }
+                },
             ],
             "@links": [
                 {"rel": "self", "href": "http://udder.wearegoat.uk/projects", "title": "Projects" },
@@ -327,23 +315,26 @@ who have more than one project associated with them.
                             "name": "title", 
                             "value": "", 
                             "prompt": "New project title", 
-                            "type": "text", 
-                            "valid": [
-                                { "required": true }, 
-                                { "maxlength": 15 }, 
-                                { "autocomplete": false }
-                            ]
+                            "@render": {
+                                "type": "text",
+                                "valid": [
+                                    { "required": true },
+                                    { "maxlength": 15 },
+                                    { "autocomplete": false }
+                                ]
+                            }
                         },
                         {
                             "name": "description", 
                             "value": "", 
                             "prompt": "New project description", 
-                            "type": "textarea", 
-                            "valid": [
-                                { "required": true }, 
-                                { "maxlength": 15 }, 
-                                { "autocomplete": false }
-                            ]
+                            "@render": {
+                                "type": "textarea",
+                                "valid": [
+                                    { "required": true },
+                                    { "autocomplete": false }
+                                ]
+                            }
                         },
                         {
                             "name": "gaCode",
