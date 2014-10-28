@@ -89,22 +89,22 @@ Single project
                 }
             },
             "@meta": {
-                "@name": "Project List",
-                "@description": "List of all projects."
+                "@name": "Project",
+                "@description": "Project section. Contains narratives and collections of the project"
                 
             },
             "_id": "1",
             "name": "Fish4Tomorrow",
-            "description": "Website for fish4tomorrow",
-            "data": {
-                "metaData": "What is going to be here?",
-                "gaCode": "code blablabla",
-                "social": [
-                    {
-                        "facebook": { "token": "" }
-                    }
-                ]
-            },
+            "description": { "value": "Website for fish4tomorrow", "prompt": "Default description" },
+            "author": { "value": "Fish4tomorrow", "prompt": "Website owner" },
+            "gaCode": { "value": "11223-4545-323", "prompt": "Google analytics code" },
+            "social": [
+                {
+                    "facebookId": "",
+                    "twitterId": "",
+                }
+            ]
+            
             "@links": [
                 {"rel": "self", "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
                 {"rel": "ud:narratives", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Project narrative collections" },
