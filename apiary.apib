@@ -66,13 +66,15 @@ Single project
 ---  
 **Project attributes:**  
    
-- _id `(ObjectId)` : unique identifier.   
+- _id `(ObjectId)` : unique identifier.
 - name `(String)` : Project name.  
 - description `(String)` : Project description.  
 - data `(Object)` : Additional project data.
 - metaData `(???)` : Metadata (format???)
 - gaCode `(String)` : Google analytics code
 - social `(Array)` : Social tokens(???)
+- @render `(Object)`: An object that contains information for clients on how to render. Depends on Prefer header and defaults to 'web'.
+ Possible options: 'web' (web client), 'verbose'(udder content manager), 'mobile'(any specific render directives for mobile)
    
 ---  
 
@@ -113,7 +115,16 @@ Single project
                 {"rel": "up", "href": "http://udder.wearegoat.uk/projects", "title": "Projects" },
                 {"rel": "start", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Projects" }
             ],
-            @actions: [
+            "@render": {
+                "type": ["card","project"]
+            },
+            "@actions": [
+                "ud:delete": {
+                    "type": "application/json",
+                    "href": "http://udder.wearegoat.uk/projects/1",
+                    "method": "DELETE",
+                    "prompt": "Delete project",
+                }
                 "ud:modify": {
                     "type": "application/json-patch+json",
                     "href": "http://udder.wearegoat.uk/projects/1",
@@ -122,41 +133,46 @@ Single project
                     "template": [
                         {
                             "name": "title", 
-                            "value": "", 
-                            "prompt": "New project title", 
-                            "type": "text", 
-                            "valid": [
-                                { "required": true }, 
-                                { "maxlength": 15 }, 
-                                { "autocomplete": false }
-                            ]
+                            "value": "",
+                            "prompt": "Project title",
+                            "@render": {
+                                "type": "text",
+                                "valid": [
+                                    { "required": true },
+                                    { "maxlength": 15 },
+                                    { "autocomplete": false }
+                                ]
+                            }
                         },
                         {
                             "name": "description", 
                             "value": "", 
-                            "prompt": "New project description", 
-                            "type": "textarea", 
-                            "valid": [
-                                { "required": true }, 
-                                { "maxlength": 15 }, 
-                                { "autocomplete": false }
-                            ]
+                            "prompt": "Project description",
+                            "@render": {
+                                "type": "text",
+                                "valid": [
+                                    { "required": true },
+                                    { "maxlength": 15 },
+                                    { "autocomplete": false }
+                                ]
+                            }
                         },
                         {
                             "name": "gaCode",
                             "value": "",
                             "prompt": "Google analytics code",
-                            "type": "text",
-                            "valid": [
-                                { "required": false },
-                                { "maxlength": 15 },
-                                { "autocomplete": false }
-                            ]
+                            "@render":{
+                                "type": "text",
+                                "valid": [
+                                    { "required": false },
+                                    { "maxlength": 15 },
+                                    { "autocomplete": false }
+                                ]
+                            }
                         }
                     ]
                 }
             ]
-            
         }
     ```
 
