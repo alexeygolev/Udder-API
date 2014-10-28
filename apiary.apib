@@ -4,24 +4,19 @@ FORMAT: 1A
 Udder API is a *content management* service for Udder CMS.
 Loosely based on _application/vnd.mason+json_ media type.
 
+NOTE: This document is a **work in progress**.
+
+
 # Group Projects
 Project related resources
 
 ## Projects collection [/projects]
-    _Private_
-    - id
-    - href
-    - slug
-    - created
-    - author
-    - data
-    - links
+Projects collection is the root endpoint for users 
+who have more than one project associated with them.
 
 + Model (application/json)
 
-    + Body
-    
-        ```
+        ```js
         {
             "@namespaces":{
             "ud":{
