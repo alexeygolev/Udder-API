@@ -966,9 +966,72 @@ to support content editor. However at this point *udder content editor* is a cus
 into json-schema validation format.
 
 ## User template [/templates/user]
+
 + Model
+    ```
+        {
+            "@namespaces":{
+            "ud":{
+                "name": "http://udder.wearegoat.uk/reltypes"
+                }
+            },
+            "@meta": {
+                "@title": "Users Groups List",
+                "@description": "List of all user groups."
+            },
+            "@data": {
+                "schema": {
+                    "type": "object",
+                    "required": [ "email", "name" ],
+                    "properties": {
+                        "name": {
+                            "name": "Name",
+                            "description": "User name",
+                            "type": "string",
+                            "pattern": "[^[^/]*$",
+                            "minLength": 2
+                        },
+                        "email": {
+                            "name": "Email",
+                            "description": "User email",
+                            "type": "string",
+                            "pattern": "^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                            
+                        }
+                    }
+                },
+                "form": [
+                    "name",
+                    {"key": "email", "type": "email"}
+                ]
+            
+            }
 
+        }
+    ```
 
+### Get Users template [GET]
+
++ Request (application/json)
+
++ Response 200
+
+    [User template][]
+
+### Modify Users template [PATCH]
+
++ Request (application/json-patch+json)
+
+    + Body
+        
+        ```js
+            [{ "op": "add", "path": "/@data/template/properties/name/description", "value": "A name for a user" }]
+        ```
++ Response 204
+    + Headers
     
+            Content-Location: http://udder.wearegoat.com/templates/user
+
+
         
 
