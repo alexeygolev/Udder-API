@@ -2,6 +2,94 @@ FORMAT: 1A
 
 # udder
 Udder API is a *content management* service for Udder CMS.
+Loosely based on _application/vnd.mason+json_ media type.
+# Group Projects
+Project related resources
+
+## Projects collection [/projects]
+
++ Model (application/json)
+    
+    _Private_
+    - id
+    - href
+    - slug
+    - created
+    - author
+    - data
+    - links
+
+
+    + Body
+    
+        ```
+        {
+            "@namespaces":{
+            "ud":{
+                "name": "http://udder.wearegoat.uk/reltypes"
+                }
+            },
+            "@meta": {
+                "@title": "Project List",
+                "@description": "List of all projects."
+            },
+            "projects": [
+                {
+                    "_id": "1",
+                    "title": "Fish4Tomorrow",
+                    "description": "Website for fish4tomorrow",
+                    "data": {
+                        "metaData": "What is going to be here?",
+                        "gaCode": "code blablabla",
+                        "social": [
+                            {
+                                "facebook": { "token": "1212" }
+                            }
+                        ]
+                    },
+                    "@links": {
+                        "self": { "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
+                        "ud:narratives": { "href": "http://udder.wearegoat.uk/projects/narratives", "title": "Project narrative collections" },
+                    }
+                }
+            ]
+            "@links": {
+                "self" : {"href": "http://udder.wearegoat.uk/projects"}
+            },
+            "@actions": {
+                "ud:createProject": {
+                    "type": "json",
+                    "href": "http://udder.wearegoat.uk/projects",
+                    "method: "POST",
+                    "prompt": "Create new project",
+                    "template": [
+                        {
+                            "name": "title", 
+                            "value": "", 
+                            "prompt": "New project title", 
+                            "type": "text", 
+                            "valid": [
+                                { "required": true }, 
+                                { "maxlength": 15 }, 
+                                { "autocomplete": false }
+                            ]
+                        },
+                        {
+                            "name": "description", 
+                            "value": "", 
+                            "prompt": "New project description", 
+                            "type": "textarea", 
+                            "valid": [
+                                { "required": true }, 
+                                { "maxlength": 15 }, 
+                                { "autocomplete": false }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+        ```
 
 # Group Narratives
 Narrative related resources of the **Udder API**
@@ -32,7 +120,6 @@ Narrative related resources of the **Udder API**
 ### Get all narratives of a project [GET]
 
 + Parameter
-   
     + projectId (required, string) ... Project Id
 
 + Request (application/json)
@@ -44,38 +131,9 @@ Narrative related resources of the **Udder API**
 
 
 + Response 400 (application/json)
-    
     + Body
-   
+    
             {"error": "blabla"}
     
         
 
-### Create a Note [POST]
-+ Request (application/json)
-
-        { "title": "Buy cheese and bread for breakfast." }
-
-+ Response 201 (application/json)
-
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
-
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
-+ Response 200 (application/json)
-
-    + Header
-
-            X-My-Header: The Value
-
-    + Body
-
-            { "id": 2, "title": "Pick-up posters from post-office" }
-
-### Remove a Note [DELETE]
-+ Response 204
