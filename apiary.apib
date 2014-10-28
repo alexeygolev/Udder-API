@@ -34,7 +34,7 @@ The workflow should follow a following pattern:
 ----
  - User requests the `/` endpoint
  - If user is in **super** group then the *start* link will contain the link to 'projectStacks' and the @links array will include
-    the link to request top super users and *possibly* user settings  
+    the link to *possibly* user settings  
  - If user is not in a **super** group the *start* link will point at his *projectStack* root
  - Client MAY choose to follow the start link if the UI for the `/` is not present
  - Clients MAY implement a *dashboard* UI state where they can combine the information by manually requesting data from the present links
@@ -63,12 +63,46 @@ The workflow should follow a following pattern:
                     This is the super route. Hope you know what you're doing"
                 
                 },
+                "projectStacks": [
+                    {
+                        "_id": "1",
+                        "name": "Fish4Tomorrow",
+                        "description": "Stack for fish4tomorrow"
+                        
+                       "@render": {
+                            "type": ["card", "project-stack"]
+                        },
+
+
+                        "@links": [
+                            { "rel": "self", "href": "http://udder.wearegoat.uk/1", "title": "Fish4tomorrow" },
+                            { "rel": "start", "href": "http://udder.wearegoat.uk/1/projects", "Projects"},
+                            
+                            { "rel": "ud:projects, "href": "http://udder.wearegoat.uk/1/projects", "Projects"}
+                            
+                        ]                    
+                    },
+                    {
+                        "_id": "1",
+                        "name": "Paul Furey",
+                        "description": "Stack for Paul Furey projects"
+                        
+                       "@render": {
+                            "type": ["card", "project-stack"]
+                        },
+
+                        "@links": [
+                            { "rel": "self", "href": "http://udder.wearegoat.uk/2", "title": "Paul Furey" },
+                            { "rel": "start", "href": "http://udder.wearegoat.uk/2/projects", "Projects"},
+                            
+                            { "rel": "ud:projects, "href": "http://udder.wearegoat.uk/2/projects", "Projects"}
+                            
+                        ]
+                    }
+
+                ],
                 "@links": {
                     "self": { "href": "http://udder.wearegoat.uk/", "title": "Udder" },
-                    "start": { "href": "http://udder.wearegoat.uk/projects-stacks", "title": "Projects stacks" }
-
-                    "ud:superUsers": { "href": "http://udder.wearegoat.uk/users", "title": "Super Users" },
-                    "ud:projectStacks": { "href": "http://udder.wearegoat.uk/projects-stacks", "title": "Projects stacks" }
                     "ud:settings": { "href": "http://udder.wearegoat.uk/settings", "title": "Settings" },
                 }
             }
@@ -100,25 +134,11 @@ The workflow should follow a following pattern:
 
                     "ud:users": { "href": "http://udder.wearegoat.uk/1/users", "title": "Users" },
                     "ud:projects": { "href": "http://udder.wearegoat.uk/1/projects", "title": "Projects" }
-                    "ud:settings": { "href": "http://udder.wearegoat.uk/settings", "title": "Settings" },
+                    "ud:settings": { "href": "http://udder.wearegoat.uk/1/settings", "title": "Settings" },
                 }
             }
         ```
         
-## Super user collection [/users]
-Collection of super users for the platform.
-It is only accessible if the user has a 'super' role. 
-It should present the list of available top endpoint actions to the admin user
-as well as top endpoint to get information.
-
-    
-+ Request bySuperUser (application/json)
-    + Headers
-        
-            Authorization: Bearer superusertoken
-    
-+ Response 200
-    
 
 # Group Projects
 Project related resources
@@ -145,7 +165,7 @@ Single project
 
     ```js
         {
-            "@namespaces":{
+            "@namespaces": {
             "ud":{
                 "name": "http://udder.wearegoat.uk/reltypes"
                 }
@@ -323,6 +343,14 @@ Get a project for a certain **projectId**
 
     [Project][]
 
+### Delete project [DELETE]
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+
++ Request (application/json)
+
++ Response 204
+
 ### Modify a project [PATCH]
 Modify a project. Using PATCH method we can modify specific fields. 
 Reponse doesn't return the modified project. However it returns *Content-Location* headers
@@ -350,15 +378,10 @@ that you going to see someone elses changes. This is potentially confusing.
     
             Content-Location: http://udder.wearegoat.com/projects/1
 
-### Delete project [DELETE]
-+ Parameter
-    + projectStackId (required, string, `1`) ... Project Stack Id
 
-+ Request (application/json)
-
-+ Response 204
    
 ## Projects collection [/{projectStackId}/projects]
+
 Projects collection is the root endpoint for users 
 who have more than one project associated with them.
 
@@ -378,27 +401,63 @@ who have more than one project associated with them.
             "projects": [
                 {
                     "_id": "1",
-                    "name": "Fish4Tomorrow",
-                    "description": "Website for fish4tomorrow",
+                    "name": "Paul Furey main website",
+                    "description": "Main website for Paul Furey",
                     "@render": {
                         "type": ["card", "project"]
                     },
                     "@links": {
                         "self": { "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
                         "ud:narratives": { "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Project narrative collections" }
+                    },
+                    "@actions": {
+                        "ud:delete": {
+                            "action": {
+                                "type": "json",
+                                "method": "DELETE",
+                                "prompt": "Delete project"
+                            }
+                        },
+                        "ud:modify": {
+                            "action": {
+                                "type":"application/json-patch+json",
+                                "method": "PATCH",
+                                "prompt": "Modify project"
+                            },
+                            "templateUrl": "http://udder.wearegoat.uk/templates/project"
+                        }
                     }
+                    
                 },
                 {
                     "_id": "1",
-                    "name": "Fish4Tomorrow",
-                    "description": "Website for fish4tomorrow",
+                    "name": "Paul Furey Executive",
+                    "description": "Executive website for Paul Furey",
                     "@render": {
                         "type": ["card", "project"]
                     },
                     "@links": {
                         "self": { "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
                         "ud:narratives": { "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Project narrative collections" }
+                    },
+                    "@actions": {
+                        "ud:delete": {
+                            "action": {
+                                "type": "json",
+                                "method": "DELETE",
+                                "prompt": "Delete project"
+                            }
+                        },
+                        "ud:modify": {
+                            "action": {
+                                "type":"application/json-patch+json",
+                                "method": "PATCH",
+                                "prompt": "Modify project"
+                            },
+                            "templateUrl": "http://udder.wearegoat.uk/templates/project"
+                        }
                     }
+                    
                 },
             ],
             "@links": [
@@ -525,57 +584,324 @@ who have more than one project associated with them.
 + Response 201
 
     [Project][]
-
-## Project stack [/{projectStackId}]
-A stack combining projects and users who can edit those projects
-
-+ Model (application/json)
-    + Body
-    ```js
+ 
+    
+# Group Users
+User related resource of the **Udder API**
+## User [/{projectStackId}/users/{userGroupId}/{userId}]
++ Model
+    ```
         {
             "@namespaces":{
             "ud":{
                 "name": "http://udder.wearegoat.uk/reltypes"
                 }
             },
-            
             "@meta": {
-                "@name": "Project stack",
-                "@description": "A stack of projects."
+                "@title": "Users Group",
+                "@description": "List of user in the group."
             },
-            
-            "@render": {
-                "type": ["card", "project-stack", "details"]
-            }
-            
             "_id": "1",
-            "name": "Fish4Tomorrow",
-            "description": "Stack for fish4tomorrow",
-            
-            "@links": [
-                {"rel": "self", "href": "http://udder.wearegoat.uk/projects-stacks/1", "title": "Fish4tomorrow" },
-                {"rel": "ud:users", "href": "http://udder.wearegoat.uk/project-stack/1/users", "title": "Users" },
-                {"rel": "ud:projects", "href": "http://udder.wearegoat.uk/projects-stack/1/projects", "title": "Projects" }
-                {"rel": "start", "href": "http://udder.wearegoat.uk/projects-stack/1/projects", "title": "Projects" }
-            ],
+            "name": "Alexey Golev",
+            "email": "alexey.golev@wearegoat.com",
+            "tel": "07403494911"
+            "@render": {
+                "type": ["card", "user"]
+            },
+            "@links": {
+                "self": { "href": "http://udder.wearegoat.uk/1/users/1/1", "title": "Alexey Golev" }
+                
+                "ud:users": { "href": "http://udder.wearegoat.uk/1/users", "title": "Users" },
+                "ud:projects": { "href": "http://udder.wearegoat.uk/1/users", "title": "Projects" },
+                "ud:settings": {"href": "http://udder.wearegoat.uk/1/settings", "title": "Settings" }
+            },
+            "@actions": {
+                "ud:delete": {
+                    "action": {
+                        "type": "json",
+                        "method": "DELETE",
+                        "prompt": "Delete user"
+                    }
+                },
+                "ud:modify": {
+                    "action": {
+                        "type":"application/json-patch+json",
+                        "method": "PATCH",
+                        "prompt": "Modify user"
+                    },
+                    "templateUrl": "http://udder.wearegoat.uk/templates/user"
+                }
+            }
+    
         }
+
     ```
     
-### Get project stack details [GET]
+### Get user [GET]
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + userGroupId (required, string, `1`) ... User group Id
+    + userId (required, string, `1`) ... User Id
+
++ Request (application/json)
+
++ Response 200
+    [User][]
+
+### Delete user [DELETE]
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + userGroupId (required, string, `1`) ... User group Id
+    + userId (required, string, `1`) ... User Id
+    
++ Request (application/json)
+
++ Response 201
+
+### Modify user [PATCH]
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + userGroupId (required, string, `1`) ... User group Id
+    + userId (required, string, `1`) ... User Id
+    
++ Request (application/json)
+
++ Response 201
+
+   + Headers
+    
+            Content-Location: http://udder.wearegoat.com/1/users/1/1
+
+    
+## User Group [/{projectStackId}/users/{userGroupId}]
++ Model (application/json)
+    ```
+        {
+            "@namespaces":{
+            "ud":{
+                "name": "http://udder.wearegoat.uk/reltypes"
+                }
+            },
+            "@meta": {
+                "@title": "Users Group",
+                "@description": "List of user in the group."
+            },
+            _id: 1,
+            "name": "Editors",
+            "description" "Users who can edit",
+            "users": [
+                {
+                    "_id": "1",
+                    "name": "Alexey Golev",
+                    "email": "alexey.golev@wearegoat.com",
+                    "tel": "07403494911"
+                    "@render": {
+                        "type": ["card", "user"]
+                    },
+                    "@links": {
+                        "self": { "href": "http://udder.wearegoat.uk/1/users/1/1", "title": "Alexey Golev" }
+                    },
+                    "@actions": {
+                        "ud:delete": {
+                            "action": {
+                                "type": "json",
+                                "method": "DELETE",
+                                "prompt": "Delete user"
+                            }
+                        },
+                        "ud:modify": {
+                            "action": {
+                                "type":"application/json-patch+json",
+                                "method": "PATCH",
+                                "prompt": "Modify user"
+                            },
+                            "templateUrl": "http://udder.wearegoat.uk/templates/user"
+                        }
+                    }
+                }
+            ],
+            "@links": {
+                "self": { "href": "http://udder.wearegoat.uk/1/users", "title": "Users" },
+                
+                "ud:users": { "href": "http://udder.wearegoat.uk/1/users", "title": "Users" },
+                "ud:projects": { "href": "http://udder.wearegoat.uk/1/users", "title": "Projects" },
+                "ud:settings": {"href": "http://udder.wearegoat.uk/1/settings", "title": "Settings" }
+            },
+            "@actions": {
+                "ud:create": {
+                    "action":{
+                        "type": "json",
+                        "method": "POST",
+                        "prompt": "Create new user",
+                    },
+                    "templateUrl": "http://udder.wearegoat.uk/templates/users"
+                }
+            }
+        }
+
+    ```
+    
+### Get user group [GET]
+Returns user group with embeded users array
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + userGroupId (required, string, `1`) ... User group Id
+
++ Request (application/json)
+
++ Response 200
+    [User Group][]
+
+
+### Delete user group [DELETE]
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + userGroupId (required, string, `1`) ... User group Id
+
++ Request (application/json)
+
++ Response 201
+
+### Modify user group [PATCH]
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + userGroupId (required, string, `1`) ... User group Id
+
++ Request (application/json)
+
++ Response 201
+
+   + Headers
+    
+            Content-Location: http://udder.wearegoat.com/1/users/1/1
+
+### Create user [POST]
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + userGroupId (required, string, `1`) ... User group Id
+
++ Request (application/json)
+
++ Response 200
+    [User][]    
+
+## User Group collection [/{projectStackId}/users]
+Users can only be requested from within a certain projectStack
+
++ Model (application/json)
+    ```
+        {
+            "@namespaces":{
+            "ud":{
+                "name": "http://udder.wearegoat.uk/reltypes"
+                }
+            },
+            "@meta": {
+                "@title": "Users Groups List",
+                "@description": "List of all user groups."
+            },
+            "usersGroups": [
+                {
+                    "_id": "1",
+                    "name": "Editors",
+                    "description": "Users that can edit things",
+                    "@render": {
+                        "type": ["card", "user-group"]
+                    },
+                    "@links": {
+                        "self": { "href": "http://udder.wearegoat.uk/1/users/1", "title": "Editors" }
+                    }
+                    "@actions": {
+                        "ud:delete": {
+                            "action": {
+                                "type": "json",
+                                "method": "DELETE",
+                                "prompt": "Delete user group"
+                            }
+                        },
+                        "ud:modify": {
+                            "action": {
+                                "type":"application/json-patch+json",
+                                "method": "PATCH",
+                                "prompt": "Modify user group"
+                            },
+                            "templateUrl": "http://udder.wearegoat.uk/templates/group"
+                        }
+                    }
+
+                }
+            ],
+            "@links": {
+                "self": { "href": "http://udder.wearegoat.uk/1/users", "title": "Users" },
+                
+                "ud:users": { "href": "http://udder.wearegoat.uk/1/users", "title": "Users" },
+                "ud:projects": { "href": "http://udder.wearegoat.uk/1/users", "title": "Projects" },
+                "ud:settings": {"href": "http://udder.wearegoat.uk/1/settings", "title": "Settings" }
+            },
+            "@actions": {
+                "ud:create": {
+                    "action":{
+                        "type": "json",
+                        "href": "http://udder.wearegoat.uk/1/users",
+                        "method": "POST",
+                        "prompt": "Create new user group",
+                    },
+                    "template": [
+                        {
+                            "name": "name", 
+                            "value": "", 
+                            "prompt": "New user group name", 
+                            "@render": {
+                                "type": "text",
+                                "valid": [
+                                    { "required": true },
+                                    { "maxlength": 15 },
+                                    { "autocomplete": false }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "description", 
+                            "value": "", 
+                            "prompt": "New user group description", 
+                            "@render": {
+                                "type": "textarea",
+                                "valid": [
+                                    { "required": true },
+                                    { "autocomplete": false }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    
+    ```
+    
+### Get user groups [GET]
 
 + Parameter
     + projectStackId (required, string, `1`) ... Project Stack Id
 
 + Request (application/json)
 
-
 + Response 200
-    [Project stack][]
+    [User Group collection][]
+
+
 
 # Group Narratives
 Narrative related resources of the **Udder API**
 
-## Narrative Collection [/{projectId}/narratives]
+## Narrative Collection [{projectStackId}/projects/{projectId}/narratives]
 
 + Model (application/json)
     + Body
