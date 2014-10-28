@@ -3,13 +3,11 @@ FORMAT: 1A
 # udder
 Udder API is a *content management* service for Udder CMS.
 Loosely based on _application/vnd.mason+json_ media type.
+
 # Group Projects
 Project related resources
 
 ## Projects collection [/projects]
-
-+ Model (application/json)
-    
     _Private_
     - id
     - href
@@ -19,10 +17,11 @@ Project related resources
     - data
     - links
 
++ Model (application/json)
 
     + Body
     
-        ```js
+        ```
         {
             "@namespaces":{
             "ud":{
@@ -101,21 +100,6 @@ Project related resources
             }
         }
         ```
-
-### Get all projects [GET]
-
-+ Request (application/json)
-
-+ Response 200
-
-    [Projects Collection][]
-
-### Create a project [POST]
-
-+ Request (application/json)
-
-+ Response 201
-    
 
 # Group Narratives
 Narrative related resources of the **Udder API**
