@@ -28,8 +28,24 @@ NOTE: This document is a **work in progress**.
 
 ## Main endpoint [/]
 ### Get main information [GET]
+Main endpoint is reserved for redirection purposes only.
+The workflow should follow a following pattern:
 
-+ Request (application/json)
+----
+ - User requests the `/` endpoint
+ - If user is in **super** group then the *start* link will contain the link to 'projectStacks' and the @links array will include
+    the link to request top super users and *possibly* user settings  
+ - If user is not in a **super** group the *start* link will point at his *projectStack* root
+ - Client MAY choose to follow the start link if the UI for the `/` is not present
+ - Clients MAY implement a *dashboard* UI state where they can combine the information by manually requesting data from the present links
+
+----
+
+
++ Request bySuperUser (application/json)
+    + Headers
+        
+            Authorization: Bearer superusertoken
 
 + Response 200
     + Body
@@ -43,25 +59,71 @@ NOTE: This document is a **work in progress**.
                 },
                 "@meta": {
                     "@name": "Udder API",
-                    "@description": "This is Udder API. Check out where you can go."
+                    "@description": "This is Udder API. Check out where you can go. 
+                    This is the super route. Hope you know what you're doing"
                 
                 },
                 "@links": {
                     "self": { "href": "http://udder.wearegoat.uk/", "title": "Udder" },
                     "start": { "href": "http://udder.wearegoat.uk/projects-stacks", "title": "Projects stacks" }
 
-                    "ud:users": { "href": "http://udder.wearegoat.uk/users", "title": "Users" },
+                    "ud:superUsers": { "href": "http://udder.wearegoat.uk/users", "title": "Super Users" },
                     "ud:projectStacks": { "href": "http://udder.wearegoat.uk/projects-stacks", "title": "Projects stacks" }
                     "ud:settings": { "href": "http://udder.wearegoat.uk/settings", "title": "Settings" },
                 }
             }
         ```
+
++ Request byUser (application/json)
+    + Headers
         
+            Authorization: Bearer usertoken
+
++ Response 200
+    + Body
+    
+        ```js
+            {
+                "@namespaces":{
+                "ud":{
+                    "name": "http://udder.wearegoat.uk/reltypes"
+                    }   
+                },
+                "@meta": {
+                    "@name": "Udder API",
+                    "@description": "This is Udder API. Check out where you can go"
+                
+                },
+                "@links": {
+                    "self": { "href": "http://udder.wearegoat.uk/", "title": "Udder" },
+                    "start": { "href": "http://udder.wearegoat.uk/1/projects", "title": "Projects" }
+
+                    "ud:users": { "href": "http://udder.wearegoat.uk/1/users", "title": "Users" },
+                    "ud:projects": { "href": "http://udder.wearegoat.uk/1/projects", "title": "Projects" }
+                    "ud:settings": { "href": "http://udder.wearegoat.uk/settings", "title": "Settings" },
+                }
+            }
+        ```
+        
+## Super user collection [/users]
+Collection of super users for the platform.
+It is only accessible if the user has a 'super' role. 
+It should present the list of available top endpoint actions to the admin user
+as well as top endpoint to get information.
+
+    
++ Request bySuperUser (application/json)
+    + Headers
+        
+            Authorization: Bearer superusertoken
+    
++ Response 200
+    
 
 # Group Projects
 Project related resources
 
-## Project [/projects/{projectId}]
+## Project [/{projectStackId}/projects/{projectId}]
 Single project
 
 ---  
@@ -78,9 +140,6 @@ Single project
  Possible options: 'web' (web client), 'verbose'(udder content manager), 'mobile'(any specific render directives for mobile)
    
 ---  
-
-+ Parameters
-    + projectId (required, string, `1`) ... The id of the project
 
 + Model
 
@@ -103,31 +162,35 @@ Single project
             "gaCode": { "value": "11223-4545-323", "prompt": "Google analytics code" },
             "meta": [
                 {
-                    "fb": {
-                        "admins": {
-                            "value": "",
-                            "prompt": "Facebook id",
-                            "@render": {
-                                "attr": "property"
-                            }
+                    "fbAdmins": {
+                        "value": "fb:admins value",
+                        "prompt": "Facebook id",
+                        "@render": {
+                            "attr": "property"
                         }
-                        
                     },
-                    "twitter": {
-                        "site": {
-                            "value": "",
-                            "prompt": "Twitter handle",
-                            "@render": {
-                                "attr": "name"
-                            }
+                    
+                    "author": {
+                        "value": "Fish4Tomorrow",
+                        "prompt": "Author",
+                        "@render": {
+                            "attr": "name"
+                        }
+                    },
+                    
+                    "twitterProjectHandle": {
+                        "value": "",
+                        "prompt": "Twitter handle",
+                        "@render": {
+                            "attr": "name"
                         },
-                        
-                        "creator": {
-                            "value": "",
-                            "prompt": "Twitter creator",
-                            "@render": {
-                                "attr": "name"
-                            }
+                    },
+                    
+                    "twitterCreatorHandle": {
+                        "value": "",
+                        "prompt": "Twitter creator",
+                        "@render": {
+                            "attr": "name"
                         }
 
                     },
@@ -136,15 +199,18 @@ Single project
             
             "@links": [
                 {"rel": "self", "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
+                {"rel": "start", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Projects" }
+                {"rel": "up", "href": "http://udder.wearegoat.uk/projects", "title": "Projects" },
+
                 {"rel": "ud:narratives", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Project narrative collections" },
                 {"rel": "ud:users", "href": "http://udder.wearegoat.uk/users", "title": "Users" },
                 {"rel": "ud:settings", "href": "http://udder.wearegoat.uk/settings", "title": "Settings" },
-                {"rel": "up", "href": "http://udder.wearegoat.uk/projects", "title": "Projects" },
-                {"rel": "start", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Projects" }
             ],
+            
             "@render": {
                 "type": [ "card", "project", "details" ]
             },
+
             "@actions": [
                 "ud:delete": {
                     "type": "application/json",
@@ -244,6 +310,12 @@ Single project
     ```
 
 ### Get a project [GET]
+Get a project for a certain **projectId**
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+    + projectId (required, string, `1`) ... The id of the project
+
 
 + Request (application/json)
 
@@ -252,51 +324,41 @@ Single project
     [Project][]
 
 ### Modify a project [PATCH]
+Modify a project. Using PATCH method we can modify specific fields. 
+Reponse doesn't return the modified project. However it returns *Content-Location* headers
+that the client can use in case it needs the modified project.
+Updating the view after PATCH is discouraged though. If there is a change to the same document 
+that was done by someone else then as a result of your PATCH operation there is a possibility
+that you going to see someone elses changes. This is potentially confusing.
+
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
 
 + Request (application/json-patch+json)
 
     + Body
         
         ```js
-            [{ "op": "add", "path": "/name", "value": "Changed name" },
-            { "op": "add", "path": "/description", "value": "Changed description" }]
+            [{ "op": "add", "path": "/name/value", "value": "Changed name" },
+            { "op": "add", "path": "/description/value", "value": "Changed description" },
+            { "op": "add", "path": "/meta/0/fb/admins/value", "value": "Changed fb value" }
+           ]
         ```
         
-+ Response 200 (application/json)
-
-    ```js
-        {
-            "@namespaces":{
-            "ud":{
-                "name": "http://udder.wearegoat.uk/reltypes"
-                }
-            },
-            "@meta": {
-                "@name": "Project List",
-                "@description": "List of all projects."
-                
-            },
-            "_id": "1",
-            "name": "Changed name",
-            "description": "Changed description",
-            "@links": [
-                {"rel": "self", "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
-                {"rel": "ud:narratives", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Project narrative collections" },
-                {"rel": "ud:users", "href": "http://udder.wearegoat.uk/users", "title": "Users" },
-                {"rel": "ud:settings", "href": "http://udder.wearegoat.uk/settings", "title": "Settings" },
-                {"rel": "up", "href": "http://udder.wearegoat.uk/projects", "title": "Projects" },
-                {"rel": "start", "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Projects" }
-            ]
-        }
-    ```
++ Response 204 (application/json)
+    + Headers
+    
+            Content-Location: http://udder.wearegoat.com/projects/1
 
 ### Delete project [DELETE]
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
 
 + Request (application/json)
 
 + Response 204
    
-## Projects collection [/projects]
+## Projects collection [/{projectStackId}/projects]
 Projects collection is the root endpoint for users 
 who have more than one project associated with them.
 
@@ -435,7 +497,10 @@ who have more than one project associated with them.
     ```
 
 ### Get all projects [GET]
-
+    
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
+            
 + Request (application/json)
 
 + Response 200
@@ -443,6 +508,8 @@ who have more than one project associated with them.
     [Projects collection][]
 
 ### Create a project [POST]
++ Parameter
+    + projectStackId (required, string, `1`) ... Project Stack Id
 
 + Request (application/json)
 
@@ -457,29 +524,9 @@ who have more than one project associated with them.
 
 + Response 201
 
-    ```js
-        {
-            "@namespaces":{
-            "ud":{
-                "name": "http://udder.wearegoat.uk/reltypes"
-                }
-            },
-            "@meta": {
-                "@name": "Project List",
-                "@description": "List of all projects."
-                
-            },
-            "_id": "1",
-            "name": "Fish4Tomorrow",
-            "description": "Website for fish4tomorrow",
-            "@links": {
-                "self": { "href": "http://udder.wearegoat.uk/projects/1", "title": "Project details" },
-                "ud:narratives": { "href": "http://udder.wearegoat.uk/projects/1/narratives", "title": "Project narrative collections" }
-            }
-        }
-    ```
+    [Project][]
 
-## Project stack [/project-stacks/{projectStackId}]
+## Project stack [/{projectStackId}]
 A stack combining projects and users who can edit those projects
 
 + Model (application/json)
@@ -524,8 +571,6 @@ A stack combining projects and users who can edit those projects
 
 + Response 200
     [Project stack][]
-
-## Project stack collection [/project-stacks]
 
 # Group Narratives
 Narrative related resources of the **Udder API**
