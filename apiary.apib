@@ -42,16 +42,17 @@ NOTE: This document is a **work in progress**.
                     }   
                 },
                 "@meta": {
-                    "@name": "Project List",
-                    "@description": "List of all projects."
+                    "@name": "Udder API",
+                    "@description": "This is Udder API. Check out where you can go."
                 
                 },
                 "@links": {
                     "self": { "href": "http://udder.wearegoat.uk/", "title": "Udder" },
-                    "ud:projects": { "href": "http://udder.wearegoat.uk/projects", "title": "Projects" },
+                    "start": { "href": "http://udder.wearegoat.uk/projects-stacks", "title": "Projects stacks" }
+
                     "ud:users": { "href": "http://udder.wearegoat.uk/users", "title": "Users" },
+                    "ud:projectStacks": { "href": "http://udder.wearegoat.uk/projects-stacks", "title": "Projects stacks" }
                     "ud:settings": { "href": "http://udder.wearegoat.uk/settings", "title": "Settings" },
-                    "start": { "href": "http://udder.wearegoat.uk/projects", "title": "Projects" }
                 }
             }
         ```
@@ -477,19 +478,52 @@ who have more than one project associated with them.
             }
         }
     ```
+
 ## Project stack [/project-stacks/{projectStackId}]
 A stack combining projects and users who can edit those projects
 
++ Model (application/json)
+    + Body
+    ```js
+        {
+            "@namespaces":{
+            "ud":{
+                "name": "http://udder.wearegoat.uk/reltypes"
+                }
+            },
+            
+            "@meta": {
+                "@name": "Project stack",
+                "@description": "A stack of projects."
+            },
+            
+            "@render": {
+                "type": ["card", "project-stack", "details"]
+            }
+            
+            "_id": "1",
+            "name": "Fish4Tomorrow",
+            "description": "Stack for fish4tomorrow",
+            
+            "@links": [
+                {"rel": "self", "href": "http://udder.wearegoat.uk/projects-stacks/1", "title": "Fish4tomorrow" },
+                {"rel": "ud:users", "href": "http://udder.wearegoat.uk/project-stack/1/users", "title": "Users" },
+                {"rel": "ud:projects", "href": "http://udder.wearegoat.uk/projects-stack/1/projects", "title": "Projects" }
+                {"rel": "start", "href": "http://udder.wearegoat.uk/projects-stack/1/projects", "title": "Projects" }
+            ],
+        }
+    ```
+    
 ### Get project stack details [GET]
 
 + Parameter
-    + projectStackId (required, string) ... Project Stack Id
+    + projectStackId (required, string, `1`) ... Project Stack Id
 
 + Request (application/json)
 
 
 + Response 200
-
+    [Project stack][]
 
 ## Project stack collection [/project-stacks]
 
