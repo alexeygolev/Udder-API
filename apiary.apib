@@ -499,6 +499,59 @@ Narrative related resources of the **Udder API**
             {"error": "blabla"}
     
 
-# Group Templates
+# Group Schema
+
+The schemas for editing and creating resources. Schemas follow *json-schema* with an addition of *form array* which
+serves as a mean to extend field types (e.g. email, password) and force fields to follow a certain order.
+Schemas are not embedded into the *@actions* object. **TODO:** Possibly add an option to embed a template into *@action*
+by adding {?template=embed} query parameter.
+
+## User schema [//schemas/user]
+
++ Model (application/json)
+    ```
+        {
+            schema: {
+                {
+                  "type": "object",
+                  "title": "User",
+                  "properties": {
+                    "name": {
+                      "title": "Full name",
+                      "type": "string"
+                    },
+                    "email": {
+                      "title": "Email",
+                      "type": "string",
+                      "pattern": "^\\S+@\\S+$"
+                    },
+                    "password": {
+                      "title": "Password",
+                      "type": "string"
+                    },
+                    "passwordConfirmation": {
+                      "title": "Confirm password",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "passwordConfirmation"
+                  ]
+                }
+            },
+            form: [
+                "name",
+                {"key": "email",
+                "type": "email"},
+                {"key": "password",
+                "type": "password"},
+                {"key": "passwordConfirmation",
+                "type": "password"}
+            ]
+        }
+    ```
     
 
